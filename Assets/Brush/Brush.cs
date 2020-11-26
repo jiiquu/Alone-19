@@ -14,6 +14,8 @@ public class Brush : MonoBehaviour {
     private Vector3     _handPosition;
     private Quaternion  _handRotation;
     private BrushStroke _activeBrushStroke;
+    public bool isPressedFake = false;
+    public Transform brushObject = null;
 
     private void Update() {
         // Start by figuring out which hand we're tracking
@@ -21,7 +23,8 @@ public class Brush : MonoBehaviour {
         string trigger = _hand == Hand.LeftHand ? "Left Trigger" : "Right Trigger";
 
         // Get the position & rotation of the hand
-        bool handIsTracking = UpdatePose(node, ref _handPosition, ref _handRotation);
+        //bool handIsTracking = UpdatePose(node, ref _handPosition, ref _handRotation);
+        bool handIsTracking = UpdatePoseFromObject(brushObject, ref _handPosition, ref _handRotation);
 
         // Figure out if the trigger is pressed or not
         bool triggerPressed = Input.GetAxisRaw(trigger) > 0.1f;
@@ -77,5 +80,12 @@ public class Brush : MonoBehaviour {
         }
 
         return false;
+    }
+
+    private static bool UpdatePoseFromObject(Transform node, ref Vector3 position, ref Quaternion rotation)
+    {
+        position = node.position;
+        rotation = node.rotation;
+        return true;
     }
 }
